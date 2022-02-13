@@ -28,15 +28,15 @@ namespace learnCsharp
                 Console.WriteLine("Level: " + User.LvL + " Xp: " + User.Xp);
                 if(User.invSlot1 != null)
                 {
-                    Console.WriteLine("Inv1: " + User.invSlot1.Name);
+                    Console.WriteLine("Inv1: " + User.invSlot1.Name + " (" + User.invSlot1.Damage + " Schaden)");
                 }
                 if(User.invSlot2 != null)
                 {
-                    Console.WriteLine("Inv2: " + User.invSlot2.Name);
+                    Console.WriteLine("Inv2: " + User.invSlot2.Name + " (" + User.invSlot2.Damage + " Schaden)");
                 }
                 if(User.invSlot3 != null)
                 {
-                    Console.WriteLine("Inv3: " + User.invSlot3.Name);
+                    Console.WriteLine("Inv3: " + User.invSlot3.Name + " (" + User.invSlot3.Damage + " Schaden)");
                 }
             }
             else

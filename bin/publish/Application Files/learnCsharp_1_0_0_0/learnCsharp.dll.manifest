@@ -68,7 +68,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>52VGSH303JV0y7pBvIG1zNpsLxLEPdlYKqF5kmbyzaI=</dsig:DigestValue>
+      <dsig:DigestValue>Bn7PEZTbiv4nmbi+LQIgO9sjC2j/BSA5yFuP1jwo0q8=</dsig:DigestValue>
     </hash>
   </file>
   <file name="learnCsharp.exe" size="174592">
