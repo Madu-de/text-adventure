@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using UserClass;
 
 namespace Monsters
 {
@@ -22,13 +21,13 @@ namespace Monsters
         public static Monster GetRandomMonster()
         {
             Random random = new Random();
-            int spawnDragonProbability = random.Next(999999999);
+            int spawnDragonProbability = random.Next(10000); // Die Wahrscheinlichkeit, das der Drache spawnt beträgt ca. 0,01%
             if(spawnDragonProbability == 2)
             {
-                return new Monster("Drache des Schreckens!", 100, 100);
+                return new Monster("Drache des Schreckens!", 100 * User.LvL, 100 * User.LvL);
             } else
             {
-                return new Monster(GetRandomName(), random.Next(50), random.Next(50));
+                return new Monster(GetRandomName(), (random.Next(10) + 1) * User.LvL, (random.Next(10) + 1) * User.LvL);
             }
         }
         public static string GetRandomName()

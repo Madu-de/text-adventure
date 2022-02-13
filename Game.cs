@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using UserClass;
 using Monsters;
 using learnCsharp;
@@ -13,21 +11,25 @@ namespace GameClass
         public static int rounds = 1;
         public static void play()
         {
-            while (User.Health >= 0)
+            while (User.Health > 0)
             {
                 Random random = new Random();
-                int rand = random.Next(2);
+                int rand = random.Next(3);
                 switch (rand)
                 {
                     case 1:
                         foundAMonster();
                         break;
+                    case 2:
+                        foundAItem();
+                        break;
                     default:
-                        foundAnItem();
+                        foundAnBottle();
                         break;
                 }
                 rounds++;
             }
+            Game.tod();
         }
         private static void foundAMonster()
         {
@@ -39,22 +41,49 @@ namespace GameClass
                 Program.WriteLine("Du hast ein Monster entdeckt!");
                 Console.WriteLine("Es heißt " + monster.Name + ", hat " + monster.HP + " Leben und macht " + monster.Damage + " Schaden.");
                 Console.WriteLine("Möchtest du es bekämpfen (fight) oder gehen (go)?");
+                if (User.invSlot1 != null)
+                {
+                    Console.WriteLine("1 um Item 1 zu benutzen");
+                }
+                if (User.invSlot2 != null)
+                {
+                    Console.WriteLine("2 um Item 2 zu benutzen");
+                }
+                if (User.invSlot3 != null)
+                {
+                    Console.WriteLine("3 um Item 3 zu benutzen");
+                }
                 input = Console.ReadLine();
-                if(input == "fight" || input == "go")
+                if(input == "fight" || input == "go" || input == "1" || input == "2" || input == "3")
                 {
                     break;
                 }
             }
-            if(input == "fight")
+            if(input == "fight" || input == "1" || input == "2" || input == "3")
             {
-                while (input == "fight" && monster.HP > 0 && User.Health > 0)
+                while (input == "fight" || input == "1" || input == "2" || input == "3" && monster.HP > 0 && User.Health > 0)
                 {
-                    monster.HP -= User.Damage;
+                    if(input == "1")
+                    {
+                        monster.HP -= User.invSlot1.Damage;
+                        User.invSlot1 = null;
+                    } else if(input == "2")
+                    {
+                        monster.HP -= User.invSlot2.Damage;
+                        User.invSlot2 = null;
+                    } else if(input == "3")
+                    {
+                        monster.HP -= User.invSlot3.Damage;
+                        User.invSlot3 = null;
+                    } else
+                    {
+                        monster.HP -= User.Damage;
+                    }
                     if (monster.HP <= 0)
                     {
-                        Program.WriteLine("Herzlichen Glückwunsch! Du hast das Moster bekämpfen können!");
-                        Console.WriteLine("Klicke auf eine Taste um weiter zu spielen!");
-                        Console.ReadKey();
+                        User.addXp(20);
+                        Program.WriteLine("Herzlichen Glückwunsch! Du hast das Monster bekämpfen können!");
+                        Program.spieleWeiter();
                         return;
                     }
                     User.Health -= monster.Damage;
@@ -68,20 +97,32 @@ namespace GameClass
                     Console.WriteLine("Das Monster hat dir  " + monster.Damage + " Leben schaden gemacht!");
                     Console.WriteLine("Du hast nurnoch " + User.Health + " Leben.");
                     Console.WriteLine("Möchtest du weiter kämpfen (fight) oder doch lieber gehen (go)?");
+                    if (User.invSlot1 != null)
+                    {
+                        Console.WriteLine("1 um Item 1 zu benutzen");
+                    }
+                    if (User.invSlot2 != null)
+                    {
+                        Console.WriteLine("2 um Item 2 zu benutzen");
+                    }
+                    if (User.invSlot3 != null)
+                    {
+                        Console.WriteLine("3 um Item 3 zu benutzen");
+                    }
                     input = Console.ReadLine();
                 }
                 
             }
                 
         }
-        private static void foundAnItem()
+        private static void foundAnBottle()
         {
             string input = "";
-            Item item = Item.GetRandomItem();
+            Bottle item = Bottle.GetRandomBottle();
             while(true)
             {
-                Program.WriteLine("Du hast ein Item entdeckt!");
-                Console.WriteLine("Möchtest du es trinken (y) oder nicht (n)?");
+                Program.WriteLine("Du hast eine Flasche entdeckt!");
+                Console.WriteLine("Möchtest du sie trinken (y) oder nicht (n)?");
                 input = Console.ReadLine();
                 if(input == "y" || input == "n")
                 {
@@ -92,12 +133,52 @@ namespace GameClass
             {
                 User.Health += item.Health;
                 User.Health -= item.Damage;
-                Program.WriteLine("Du hast das Item zu dir genommen!");
-                Console.WriteLine("Das Item hat dir " + item.Health + " Leben erbracht und " + item.Damage + " Leben genommen.");
-                Console.WriteLine("Du hast insgesammt " + (item.Health - item.Damage) + " Leben erhalten!");
-                Console.WriteLine("Klicke auf eine Taste um weiter zu spielen!");
-                Console.ReadKey();
-
+                if(User.Health <= 0)
+                {
+                    Game.tod();
+                } else
+                {
+                    Program.WriteLine("Du hast die Flasche zu dir genommen!");
+                    Console.WriteLine("Sie hat dir " + item.Health + " Leben erbracht und " + item.Damage + " Leben genommen.");
+                    Console.WriteLine("Du hast insgesammt " + (item.Health - item.Damage) + " Leben erhalten!");
+                    Program.spieleWeiter();
+                }
+            }
+        }
+        public static void foundAItem()
+        {
+            string input = "";
+            Item item = Item.getRandomItem();
+            while (true)
+            {
+                Program.WriteLine("Du hast ein Item entdeckt!");
+                Console.WriteLine("Es ist ein(e) " + item.Name);
+                Console.WriteLine("Möchtest du sie aufsammeln (y) oder nicht (n)?");
+                input = Console.ReadLine();
+                if (input == "y" || input == "n")
+                {
+                    break;
+                }
+            }
+            if(input == "y")
+            {
+                if(User.invSlot1 == null)
+                {
+                    User.invSlot1 = item;
+                } else if(User.invSlot2 == null)
+                {
+                    User.invSlot2 = item;
+                } else if(User.invSlot3 == null)
+                {
+                    User.invSlot3 = item;
+                } else
+                {
+                    Console.WriteLine("Dein Inventar ist voll!");
+                    Program.spieleWeiter();
+                    return;
+                }
+                Program.WriteLine("Das Item wurde hinzugefügt.");
+                Program.spieleWeiter();
             }
         }
         public static void tod()
