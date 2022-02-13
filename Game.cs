@@ -66,22 +66,26 @@ namespace GameClass
                     if(input == "1")
                     {
                         monster.HP -= User.invSlot1.Damage;
+                        Program.WriteLine("Du hast dem Monster " + User.invSlot1.Damage + " Leben schaden gemacht!");
                         User.invSlot1 = null;
                     } else if(input == "2")
                     {
                         monster.HP -= User.invSlot2.Damage;
+                        Program.WriteLine("Du hast dem Monster " + User.invSlot2.Damage + " Leben schaden gemacht!");
                         User.invSlot2 = null;
                     } else if(input == "3")
                     {
                         monster.HP -= User.invSlot3.Damage;
+                        Program.WriteLine("Du hast dem Monster " + User.invSlot3.Damage + " Leben schaden gemacht!");
                         User.invSlot3 = null;
                     } else
                     {
                         monster.HP -= User.Damage;
+                        Program.WriteLine("Du hast dem Monster " + User.Damage + " Leben schaden gemacht!");
                     }
                     if (monster.HP <= 0)
                     {
-                        User.addXp(20);
+                        User.addXp(20 * User.LvL);
                         Program.WriteLine("Herzlichen Glückwunsch! Du hast das Monster bekämpfen können!");
                         Program.spieleWeiter();
                         return;
@@ -92,7 +96,6 @@ namespace GameClass
                         Game.tod();
                         return;
                     }
-                    Program.WriteLine("Du hast dem Monster " + User.Damage + " Leben schaden gemacht!");
                     Console.WriteLine("Es hat nurnoch " + monster.HP + " Leben.");
                     Console.WriteLine("Das Monster hat dir  " + monster.Damage + " Leben schaden gemacht!");
                     Console.WriteLine("Du hast nurnoch " + User.Health + " Leben.");
@@ -112,6 +115,18 @@ namespace GameClass
                     input = Console.ReadLine();
                 }
                 
+            }
+            if (input == "go")
+            {
+                Random random = new Random();
+                int rnd = random.Next(10); // Wahrscheinlichkeit 10%
+                if (rnd == 3)
+                {
+                    User.Health -= monster.Damage;
+                    Program.WriteLine(monster.Name + " hat dich wärend des Weglaufens gesehen und angegriffen!");
+                    Console.WriteLine("Du hast " + monster.Damage + " Leben weniger!");
+                    Program.spieleWeiter();
+                }
             }
                 
         }
@@ -173,7 +188,7 @@ namespace GameClass
                     User.invSlot3 = item;
                 } else
                 {
-                    Console.WriteLine("Dein Inventar ist voll!");
+                    Program.WriteLine("Dein Inventar ist voll!");
                     Program.spieleWeiter();
                     return;
                 }

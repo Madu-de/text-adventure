@@ -21,10 +21,11 @@ namespace UserClass
 
         public static void load()
         {
+            Random random = new Random();
             User.Name = getName();
             User.Alter = getAlter();
-            User.Health = 20;
-            User.Damage = 5;
+            User.Health = random.Next(5, 20);
+            User.Damage = random.Next(1, 5);
             User.LvL = 1;
         }
         static string getName()
@@ -54,7 +55,7 @@ namespace UserClass
         {
             User.LvL++;
             User.Health += 2 * User.LvL;
-            User.Damage += 2 * User.LvL;
+            User.Damage += User.LvL / 2;
         }
     }
 }
